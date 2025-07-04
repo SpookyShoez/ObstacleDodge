@@ -5,6 +5,8 @@ public class Mover : MonoBehaviour
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float turnSpeed = 100f;
 
+    public ParticleSystem CarGas;
+
     void Start()
     {
         PrintInstructions();
@@ -13,6 +15,17 @@ public class Mover : MonoBehaviour
     void Update()
     {
         MovePlayer();
+        // Play exhaust when pressing W or UpArrow
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        {
+            if (!CarGas.isPlaying)
+                CarGas.Play();
+        }
+        else
+        {
+            if (CarGas.isPlaying)
+                CarGas.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
     }
 
     void PrintInstructions()
