@@ -3,28 +3,37 @@ using TMPro;
 
 public class FinishTrigger : MonoBehaviour
 {
-    public ParticleSystem confettiEffect;  // Drag your confetti particle system here
-    public GameObject winTextUI;      // Drag your TextMeshProUGUI object here
+    public ParticleSystem confettiEffect;  
+    public GameObject winTextUI;      
+    public AudioSource winAudioSource;    
+
 
     void Start()
     {
+        winAudioSource = GetComponent<AudioSource>();
+
         if (winTextUI != null)
             winTextUI.SetActive(false); // Forces it hidden at runtime
     }
 
-    private void OnTriggerEnter(Collider other)
+   private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) // Make sure your player has the tag "Player"
+        if (other.CompareTag("Player")) 
         {
-            // Move the confetti to player's position + burst upward
-            confettiEffect.transform.position = other.transform.position + Vector3.up * 1.5f;
-            confettiEffect.Play();
-
-            // Show the win text
-            winTextUI.SetActive(true);
+            
+            if (confettiEffect != null)
             {
-
+                confettiEffect.transform.position = other.transform.position + Vector3.up * 1.5f;
+                confettiEffect.Play();
             }
+
+            
+            if (winTextUI != null)
+                winTextUI.SetActive(true);
+
+            
+            if (winAudioSource != null && !winAudioSource.isPlaying)
+                winAudioSource.Play();
 
             Debug.Log("🎉 Finish line reached!");
         }
